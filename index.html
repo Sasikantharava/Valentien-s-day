@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Valentine's Question</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Styling & Theme --- */
+        :root {
+            --neon-pink: #ff006e;
+            --neon-blue: #00f5ff;
+            --neon-purple: #bf00ff;
+            --bg-dark: #0a0014;
+            --text-light: #f0f0f0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Animated Neon Hearts Background --- */
+        #floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -10%;
+            font-size: 2rem;
+            animation: floatUp 15s linear infinite;
+            opacity: 0;
+        }
+
+        .heart.neon-pink {
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px var(--neon-pink), 0 0 42px var(--neon-pink);
+        }
+        .heart.neon-blue {
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px var(--neon-blue), 0 0 42px var(--neon-blue);
+        }
+        .heart.neon-purple {
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px var(--neon-purple), 0 0 42px var(--neon-purple);
+        }
+        
+        @keyframes floatUp {
+            0% { bottom: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { bottom: 110%; opacity: 0; }
+        }
+        
+        /* --- Main Content Container --- */
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(10, 0, 20, 0.7);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* --- Neon Effects --- */
+        .neon-text-pink {
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px var(--neon-pink), 0 0 42px var(--neon-pink), 0 0 82px var(--neon-pink);
+        }
+        .neon-text-blue {
+            color: #fff;
+            text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px var(--neon-blue), 0 0 42px var(--neon-blue), 0 0 82px var(--neon-blue);
+        }
+        
+        /* --- Screen Management --- */
+        .screen {
+            display: none;
+            animation: fadeIn 1.5s;
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            /* Responsive font size: scales with viewport width, but with min/max limits */
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 50px;
+        }
+        p, .btn {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            line-height: 1.6;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            background-color: transparent;
+            color: var(--text-light);
+            font-weight: 400;
+            padding: 12px 30px;
+            margin: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: 1px;
+        }
+        .btn-neon-pink {
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+        }
+        .btn-neon-pink:hover {
+            background-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink), 0 0 25px var(--neon-pink);
+            transform: scale(1.1);
+        }
+        
+        /* --- The Runaway "No" Button --- */
+        #no-btn {
+            position: fixed;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            padding: 10px 25px;
+            font-size: 1.2rem;
+            transition: top 0.2s ease, left 0.2s ease;
+            z-index: 100;
+        }
+        #no-btn:hover {
+            background-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 25px var(--neon-blue);
+        }
+
+        /* --- Final Screen --- */
+        #final-screen h1 {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Mobile Specific Styles --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 20px;
+            }
+            .heart {
+                font-size: 1.5rem; /* Smaller hearts on mobile */
+            }
+            /* Hide the 'No' button on touch devices */
+            body.touch-device #no-btn {
+                display: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div id="floating-hearts">
+        <span class="heart neon-pink" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">❤️</span>
+        <span class="heart neon-blue" style="left: 30%; animation-duration: 15s; animation-delay: 2s;">💖</span>
+        <span class="heart neon-purple" style="left: 50%; animation-duration: 10s; animation-delay: 4s;">💕</span>
+        <span class="heart neon-pink" style="left: 70%; animation-duration: 14s; animation-delay: 1s;">💗</span>
+        <span class="heart neon-blue" style="left: 85%; animation-duration: 11s; animation-delay: 3s;">💝</span>
+        <span class="heart neon-purple" style="left: 15%; animation-duration: 16s; animation-delay: 5s;">❤️</span>
+        <span class="heart neon-pink" style="left: 45%; animation-duration: 13s; animation-delay: 0.5s;">💖</span>
+        <span class="heart neon-blue" style="left: 60%; animation-duration: 17s; animation-delay: 6s;">💕</span>
+        <span class="heart neon-purple" style="left: 90%; animation-duration: 12s; animation-delay: 2.5s;">💗</span>
+    </div>
+
+    <div class="container">
+        <!-- SCREEN 1: Welcome -->
+        <div id="welcome-screen" class="screen active">
+            <h1 class="neon-text-pink">A Valentine's Question</h1>
+            <p>I have one very important question for you... There's really only one right answer.</p>
+            <button class="btn btn-neon-pink" onclick="startGame()">Ask Me!</button>
+        </div>
+
+        <!-- SCREEN 2: The Funny Game -->
+        <div id="game-screen" class="screen">
+            <h2 class="neon-text-blue">Will you be my Valentine?</h2>
+            
+            <button class="btn btn-neon-pink" id="yes-btn" onclick="showFinalWish()">Yes</button>
+        </div>
+
+        <!-- SCREEN 3: Final Wish -->
+        <div id="final-screen" class="screen">
+            <h1 class="neon-text-pink">Happy Valentine's Day!</h1>
+            <p style="font-size: 1.5rem; margin-top: 20px;">
+                I knew you'd say yes! You make every day brighter. I love you more than anything❤︎.
+            </p>
+            <button class="btn btn-neon-blue" onclick="location.reload()">Ask Again</button>
+        </div>
+    </div>
+
+    <!-- The "No" button is outside the container so it can move freely -->
+    <button class="btn" id="no-btn">No</button>
+
+  <script>
+const noBtn = document.getElementById('no-btn');
+const yesBtn = document.getElementById('yes-btn');
+
+// Detect touch device
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
+// Move button randomly
+function moveNoButton() {
+    const viewWidth = window.innerWidth;
+    const viewHeight = window.innerHeight;
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = viewWidth - btnWidth - 20;
+    const maxY = viewHeight - btnHeight - 20;
+
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+}
+
+// Desktop: runaway on hover
+noBtn.addEventListener('mouseover', () => {
+    if (!isTouchDevice()) {
+        moveNoButton();
+    }
+});
+
+// Mobile: tap → turn into fake YES & move
+noBtn.addEventListener('touchstart', (e) => {
+    if (isTouchDevice()) {
+        e.preventDefault(); // stop accidental clicks
+
+        noBtn.textContent = 'Yes 💖';
+        noBtn.style.borderColor = 'var(--neon-pink)';
+        noBtn.style.boxShadow = '0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink)';
+
+        moveNoButton();
+    }
+});
+
+// Screen control (unchanged)
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+}
+
+function startGame() {
+    showScreen('game-screen');
+    noBtn.style.display = 'block';
+    moveNoButton();
+}
+
+function showFinalWish() {
+    showScreen('final-screen');
+    noBtn.style.display = 'none';
+}
+
+window.onload = () => {
+    noBtn.style.display = 'none';
+};
+</script>
+
+</body>
+</html>
