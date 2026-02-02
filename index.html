@@ -232,53 +232,47 @@
     <!-- The "No" button is outside the container so it can move freely -->
     <button class="btn" id="no-btn">No</button>
 
-  <script>
+ <script>
 const noBtn = document.getElementById('no-btn');
-const yesBtn = document.getElementById('yes-btn');
 
 // Detect touch device
 function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 
-// Move button randomly
+// Move button randomly (FAST)
 function moveNoButton() {
     const viewWidth = window.innerWidth;
     const viewHeight = window.innerHeight;
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
 
-    const maxX = viewWidth - btnWidth - 20;
-    const maxY = viewHeight - btnHeight - 20;
+    const maxX = viewWidth - btnWidth - 10;
+    const maxY = viewHeight - btnHeight - 10;
 
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
 
     noBtn.style.left = `${randomX}px`;
     noBtn.style.top = `${randomY}px`;
 }
 
-// Desktop: runaway on hover
-noBtn.addEventListener('mouseover', () => {
-    if (!isTouchDevice()) {
-        moveNoButton();
-    }
-});
+// 🚀 Desktop: runaway on hover
+noBtn.addEventListener('mouseover', moveNoButton);
 
-// Mobile: tap → turn into fake YES & move
+// 📱 Mobile: runaway on touch
 noBtn.addEventListener('touchstart', (e) => {
-    if (isTouchDevice()) {
-        e.preventDefault(); // stop accidental clicks
-
-        noBtn.textContent = 'Yes 💖';
-        noBtn.style.borderColor = 'var(--neon-pink)';
-        noBtn.style.boxShadow = '0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink)';
-
-        moveNoButton();
-    }
+    e.preventDefault();
+    moveNoButton();
 });
 
-// Screen control (unchanged)
+// 🖱️ Extra safety: runaway on click (just in case)
+noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    moveNoButton();
+});
+
+// Screen control
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -301,6 +295,7 @@ window.onload = () => {
     noBtn.style.display = 'none';
 };
 </script>
+
 
 </body>
 </html>
